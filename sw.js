@@ -1,7 +1,7 @@
 // Makes the game an app: it opens without a connection (playing with others
 // still needs one). The newest version always wins when there is a network;
 // files named after a release, sounds and icons come from the cache.
-const VERSION = '494cc10-11231702';
+const VERSION = '1857b00-11231750';
 const CACHE = `parcel-${VERSION}`;
 const SHELL = ['./', 'manifest.webmanifest', 'icons/icon-192.png'];
 
