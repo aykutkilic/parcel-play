@@ -332,3 +332,40 @@ input.bid { width: 90px; padding: 5px 8px; }
   .deed.big .deed-rents { display: none; }
   .as-bid { font-size: 36px; }
 }
+
+/* ---------------------------------------------------------------- İstanbul: simit, maps, Enflasyon, narrator */
+.sm { display: inline-block; width: 0.82em; height: 0.82em; margin-left: 0.08em; vertical-align: -0.08em; border-radius: 50%;
+  background: radial-gradient(circle, transparent 0 30%, #b7772f 31% 69%, transparent 70%),
+    radial-gradient(circle at 50% 12%, #f7e3b4 0 6%, transparent 7%), radial-gradient(circle at 88% 50%, #f7e3b4 0 6%, transparent 7%),
+    radial-gradient(circle at 50% 88%, #f7e3b4 0 6%, transparent 7%), radial-gradient(circle at 12% 50%, #f7e3b4 0 6%, transparent 7%);
+  background-blend-mode: normal; box-shadow: inset 0 0 0 0.06em rgba(90, 50, 10, 0.35); }
+.maps { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+button.mapbtn { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; padding: 10px 12px; }
+button.mapbtn small { color: var(--muted); font-size: 12px; }
+button.mapbtn.on { outline: 3px solid var(--accent); outline-offset: 1px; background: #33465a; }
+button.mapbtn:disabled { opacity: 0.6; }
+.note { font-size: 13px; color: #ffd98a; margin: 6px 0; }
+.infl { font-weight: 800; color: #ff9b7a; font-size: 13px; }
+.clockwrap { font-weight: 700; font-size: 13px; font-variant-numeric: tabular-nums; }
+.clock.low { color: var(--bad); }
+.ll.infl { color: #ff9b7a; font-weight: 700; }
+.gcard { border-top-color: var(--c, #d46a2e); }
+.lang { font-weight: 800; letter-spacing: 0.05em; }
+.chipbtn.on { background: rgba(240, 179, 60, 0.25); }
+
+.inflstamp { position: fixed; left: 50%; top: 42%; transform: translate(-50%, -50%) rotate(-8deg) scale(0.4); z-index: 50; pointer-events: none;
+  border: 8px solid #e0402f; color: #e0402f; background: rgba(255, 246, 232, 0.94); border-radius: 18px; padding: 14px 34px 18px; text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); animation: slam 0.35s cubic-bezier(.2, 1.6, .4, 1) forwards; transition: opacity 0.5s, transform 0.5s; }
+.inflstamp .is-word { font-size: 56px; font-weight: 900; letter-spacing: 0.06em; line-height: 1; }
+.inflstamp .is-pct { font-size: 40px; font-weight: 900; color: #22212a; }
+.inflstamp .is-sub { font-size: 15px; color: #574f43; font-weight: 600; }
+.inflstamp.out { opacity: 0; transform: translate(-50%, -60%) rotate(-8deg) scale(1.05); }
+@keyframes slam { to { transform: translate(-50%, -50%) rotate(-8deg) scale(1); } }
+body.shake #stage, body.shake #hud { animation: shake 0.6s; }
+@keyframes shake { 10%, 50%, 90% { transform: translate(-6px, 2px); } 30%, 70% { transform: translate(6px, -3px); } }
+
+.narr label { display: block; margin: 10px 0; }
+.narr select { max-width: 100%; }
+.dl { margin: 10px 0; }
+.dlbar { height: 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+.dlbar i { display: block; height: 100%; background: var(--accent); transition: width 0.3s; }
