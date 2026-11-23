@@ -225,6 +225,29 @@ input.bid { width: 90px; padding: 5px 8px; }
 .gtext { font-size: 14px; margin: 5px 0; font-weight: 600; }
 .gwho { font-size: 12px; color: #776; }
 
+/* the roll, in the middle of the screen */
+#dicepop { position: fixed; left: 50%; top: 44%; transform: translate(-50%, -50%) scale(0.85); z-index: 14; opacity: 0; pointer-events: none; transition: opacity 0.7s, transform 0.7s; }
+#dicepop.show { opacity: 1; transform: translate(-50%, -50%); transition-duration: 0.15s; }
+.dpop { text-align: center; filter: drop-shadow(0 8px 22px rgba(0, 0, 0, 0.55)); }
+.dwho { display: inline-block; background: var(--c); color: #fff; font-size: 13px; font-weight: 800; padding: 1px 11px; border-radius: 999px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6); }
+.dfaces { display: flex; gap: 14px; justify-content: center; margin: 7px 0 1px; }
+.dface { width: 66px; height: 66px; padding: 9px; display: grid; grid-template: repeat(3, 1fr) / repeat(3, 1fr); place-items: center; border-radius: 14px; background: linear-gradient(145deg, #fffdf6, #e6dcc5); box-shadow: inset 0 -3px 5px rgba(120, 95, 50, 0.35), inset 0 2px 2px #fff; }
+.dface i { width: 13px; height: 13px; border-radius: 50%; }
+.dface i.on { background: radial-gradient(circle at 35% 30%, #4a4a4a, #111); }
+.dface i.one { width: 17px; height: 17px; background: radial-gradient(circle at 35% 30%, #f0705c, #b52a1c); }
+.dpop.rolling .dface { animation: dshake 0.18s linear infinite; }
+.dpop.rolling .dface:last-child { animation-direction: reverse; }
+.dpop.landed .dface { animation: dland 0.3s cubic-bezier(.2, 1.7, .4, 1); }
+.dpop.dbl .dface { box-shadow: 0 0 0 3px #ffcf4a, 0 0 26px rgba(255, 207, 74, 0.75), inset 0 -3px 5px rgba(120, 95, 50, 0.35); }
+.dsum { font-size: 34px; font-weight: 900; line-height: 1.1; color: #fff; text-shadow: 0 2px 8px #000, 0 0 3px #000; font-variant-numeric: tabular-nums; }
+.dsum span { font-size: 20px; color: #ffcf4a; }
+@keyframes dshake { 0% { transform: rotate(-9deg) translateY(2px); } 50% { transform: rotate(9deg) translateY(-5px); } 100% { transform: rotate(-9deg) translateY(2px); } }
+@keyframes dland { from { transform: scale(1.35); } }
+@media (prefers-reduced-motion: reduce) { .dpop .dface { animation: none !important; } }
+
+#auction { position: fixed; inset: 0; z-index: 4; pointer-events: none; }
+.as-controls[hidden], .as-controls [hidden] { display: none; }
+
 /* ---------------------------------------------------------------- phones */
 @media (max-width: 720px) {
   .split, .sides { grid-template-columns: 1fr; }
@@ -291,8 +314,7 @@ input.bid { width: 90px; padding: 5px 8px; }
 .as-mid { display: flex; flex-direction: column; align-items: center; gap: 3px; }
 .as-bidlabel { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; }
 .as-bid { font-size: 27px; font-weight: 900; line-height: 1; color: #fff; font-variant-numeric: tabular-nums; }
-.as-bid.has { animation: bump 0.35s ease-out; color: #ffe08a; }
-@keyframes bump { 0% { transform: scale(1.35); } 100% { transform: scale(1); } }
+.as-bid.has { color: #ffe08a; }
 .as-bidder { display: inline-flex; align-items: center; gap: 6px; background: var(--c); color: #fff; padding: 1px 9px 1px 5px; font-size: 12px; border-radius: 999px; font-weight: 700; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); }
 .as-bidder.none { background: rgba(255, 255, 255, 0.08); color: var(--muted); padding: 3px 12px; text-shadow: none; }
 .ring { position: relative; width: 44px; height: 44px; margin-top: 2px; }
