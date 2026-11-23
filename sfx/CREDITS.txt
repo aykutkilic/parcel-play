@@ -1,0 +1,17 @@
+The recorded sounds in this folder are all CC0 (public domain,
+https://creativecommons.org/publicdomain/zero/1.0/) – credit is not required,
+but deserved. They were trimmed and turned into mono MP3s.
+
+Kenney (www.kenney.nl) – Casino Audio 1.1, RPG Audio, Music Jingles
+  https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips
+    shake*, throw*, die*, step*, card*, chip*, pay*, place*
+  https://opengameart.org/content/50-rpg-sound-effects
+    coins*, hammer, latch, door
+  https://opengameart.org/content/85-short-music-jingles
+    win
+rubberduck – 100 CC0 SFX
+  https://opengameart.org/content/100-cc0-sfx
+    gavel, bell, stamp
+
+Everything else (horns, whistle, gull, chimes, trombone) is synthesized in
+client/audio.js.
