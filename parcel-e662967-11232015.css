@@ -71,12 +71,34 @@ h4 { font-size: 13px; color: var(--muted); margin-top: 10px; }
 .field input { display: block; width: 100%; margin-top: 4px; font-size: 16px; }
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
 .box { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.split > .box { min-width: 0; }
+.box input, .box select { min-width: 0; max-width: 100%; box-sizing: border-box; }
 .box h3 { margin: 0; }
 input.code { font-size: 22px; letter-spacing: 0.3em; text-transform: uppercase; text-align: center; font-weight: 700; }
 .check { font-size: 14px; display: block; margin: 6px 0; }
 .roomlist { margin-top: 16px; }
 .rlh { display: flex; justify-content: space-between; align-items: center; }
 .rlh h3 { margin: 0; }
+.rlh { gap: 10px; }
+.rlh .muted { margin-left: auto; font-size: 13px; }
+.rfilters { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 4px 0; }
+.rfilters .check { font-size: 12px; margin: 0; color: var(--muted); }
+button.room { flex-wrap: wrap; }
+button.room.full { opacity: 0.55; }
+.livetag, .kicky { font-size: 10px; font-weight: 800; padding: 1px 5px; border-radius: 4px; background: rgba(255, 106, 92, 0.25); color: #ffb3aa; }
+.kicky { background: rgba(255, 214, 90, 0.18); color: #ffd65a; }
+.access { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 13px; }
+.access select, .access input { flex: 1 1 110px; min-width: 0; }
+.passrow { display: flex; gap: 4px; flex: 1 1 150px; min-width: 0; }
+.passrow[hidden], .access input[hidden] { display: none; }
+.ahint { font-size: 12px; }
+.askrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; padding: 10px; border-radius: 9px; background: rgba(240, 179, 60, 0.1); }
+.askrow input { flex: 1; min-width: 110px; }
+.accessline { gap: 8px; flex-wrap: wrap; }
+.kickmenu input { width: 100%; box-sizing: border-box; }
+.roommodal .people { display: flex; flex-direction: column; gap: 4px; margin: 10px 0; }
+.roommodal .member .mx button { padding: 2px 8px; }
+button.wa { background: #1f9d55; color: #fff; }
 button.room { display: flex; width: 100%; text-align: left; margin-top: 6px; gap: 4px; align-items: baseline; }
 button.room .rc { margin-left: auto; font-weight: 800; letter-spacing: 0.15em; color: var(--accent); }
 .mode { font-size: 12px; margin-top: 16px; }
