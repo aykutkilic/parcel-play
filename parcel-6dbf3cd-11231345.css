@@ -47,7 +47,7 @@ h4 { font-size: 13px; color: var(--muted); margin-top: 10px; }
 
 /* ---------------------------------------------------------------- top bar */
 #top { position: fixed; top: 0; left: 0; right: 0; z-index: 5; pointer-events: none; }
-.topbar { display: flex; align-items: center; gap: 5px; padding: 6px 8px; padding-top: max(6px, env(safe-area-inset-top)); pointer-events: auto; background: linear-gradient(to bottom, rgba(20, 32, 43, 0.9), rgba(20, 32, 43, 0)); }
+.topbar { display: flex; align-items: center; gap: 5px; padding: 6px max(8px, env(safe-area-inset-right)) 6px max(8px, env(safe-area-inset-left)); padding-top: max(6px, env(safe-area-inset-top)); pointer-events: auto; background: linear-gradient(to bottom, rgba(20, 32, 43, 0.9), rgba(20, 32, 43, 0)); }
 .brand { font-weight: 900; letter-spacing: 0.12em; font-size: 15px; color: var(--accent); margin-right: 4px; }
 .chipbtn { background: rgba(20, 32, 43, 0.6); border-radius: 999px; padding: 2px 9px; font-size: 12px; }
 .topbar > button { padding: 2px 9px; font-size: 12px; }
@@ -100,9 +100,9 @@ button.sw { width: 30px; height: 30px; border-radius: 50%; padding: 0; border: 2
 
 /* ---------------------------------------------------------------- HUD */
 #hud { position: fixed; inset: 0; z-index: 3; pointer-events: none; }
-#hud .left { position: absolute; top: 44px; left: 8px; bottom: 44px; width: 188px; display: flex; flex-direction: column; gap: 6px; pointer-events: none; }
+#hud .left { position: absolute; top: calc(44px + env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left)); bottom: 44px; width: 188px; display: flex; flex-direction: column; gap: 6px; pointer-events: none; }
 #hud .left > * { pointer-events: auto; }
-#hud .right { position: absolute; top: 44px; right: 8px; bottom: 44px; width: 232px; display: flex; flex-direction: column; gap: 6px; pointer-events: none; }
+#hud .right { position: absolute; top: calc(44px + env(safe-area-inset-top)); right: max(8px, env(safe-area-inset-right)); bottom: 44px; width: 232px; display: flex; flex-direction: column; gap: 6px; pointer-events: none; }
 #hud .right > * { pointer-events: auto; }
 .players { display: flex; flex-direction: column; gap: 3px; }
 .pcard { position: relative; display: flex; align-items: center; gap: 5px; height: 26px; padding: 0 8px 0 5px; background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--c); border-radius: 7px; }
@@ -169,13 +169,22 @@ input.bid { width: 90px; padding: 5px 8px; }
 .modal button.small { padding: 3px 8px; font-size: 12px; }
 .modal .x { position: absolute; top: 10px; right: 10px; background: transparent; border: none; font-size: 16px; color: var(--muted); }
 
-.tilecard .th { margin: -14px -14px 8px; padding: 10px 14px 8px; border-radius: 13px 13px 0 0; background: var(--c); color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); }
-.tgroup { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.9; }
-.tilecard h2 { margin: 2px 0; }
-.rents { width: 100%; border-collapse: collapse; font-size: 12px; }
-.rents td { padding: 2px 0; border-bottom: 1px solid var(--line); }
-.rents td:last-child { text-align: right; font-variant-numeric: tabular-nums; }
-.rents tr.on td { color: var(--accent); font-weight: 700; }
+.modal-wrap.bare { background: rgba(5, 10, 15, 0.18); }
+.modal.bare { width: 214px; padding: 0; background: none; border: 0; overflow: visible; box-shadow: none; }
+.modal.bare .x { top: 1px; right: 2px; z-index: 1; color: #fff; padding: 2px 8px; font-size: 13px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6); }
+.tilecard .deed { max-height: calc(100vh - 60px); overflow-y: auto; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55); }
+.tilecard .deed-band { padding-right: 26px; }
+.tilecard .deed-name { font-size: 17px; padding-top: 6px; }
+.tilecard .deed-price { font-size: 13px; }
+.tilecard .deed-rents { font-size: 13px; }
+.tilecard .deed-rents td { padding: 3px 0; }
+.deed-rents tr.on td { color: #a8560a; font-weight: 800; background: rgba(240, 179, 60, 0.22); }
+.deed-more { padding: 0 9px 8px; font-size: 12px; color: #4c483e; }
+.deed-more p { margin: 3px 0; }
+.deed-more .muted, .deed-note { color: #7d7666; }
+.deed-note { font-style: italic; }
+.deed-clause { font-size: 11px; color: #2f4f86; margin: 2px 0; }
+.tilecard .deed-btns { padding: 5px 0 0; }
 .owner { margin: 10px 0 0; }
 
 .assets-t { width: 100%; border-collapse: collapse; }
@@ -252,7 +261,7 @@ input.bid { width: 90px; padding: 5px 8px; }
 @media (max-width: 720px) {
   .split, .sides { grid-template-columns: 1fr; }
   .logo { font-size: 36px; }
-  #hud .left { top: 40px; bottom: auto; left: 0; right: 0; width: auto; pointer-events: auto; overflow-x: auto; overflow-y: hidden; padding: 0 8px; }
+  #hud .left { top: calc(40px + env(safe-area-inset-top)); bottom: auto; left: 0; right: 0; width: auto; pointer-events: auto; overflow-x: auto; overflow-y: hidden; padding: 0 8px; }
   #hud .left .players { flex-direction: row; }
   .pcard { flex: none; height: 30px; }
   .pside { position: static; }
@@ -260,7 +269,6 @@ input.bid { width: 90px; padding: 5px 8px; }
   .log { max-height: 120px; }
   .offers { max-height: 30vh; }
   .screen.lobby .card { margin: 0 auto auto; }
-  .tilecard .th { margin: -14px -14px 8px; }
 }
 
 /* ---------------------------------------------------------------- timers */
@@ -402,7 +410,7 @@ canvas.mm { display: block; width: 100%; height: auto; border-radius: 8px; curso
 .fold.map[open] { width: 100%; max-width: 246px; }
 
 /* who owns what: one bar for the whole table */
-#hud .dock { position: absolute; left: 8px; right: 8px; bottom: 8px; display: flex; justify-content: center; pointer-events: none; }
+#hud .dock { position: absolute; left: 8px; right: 8px; bottom: max(8px, env(safe-area-inset-bottom)); display: flex; justify-content: center; pointer-events: none; }
 .owners { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 7px; padding: 5px 8px; max-width: 100%; background: var(--panel); border: 1px solid var(--line); border-radius: 9px; pointer-events: auto; }
 .oset { display: inline-flex; gap: 2px; border-radius: 4px; }
 .oset.full { box-shadow: 0 0 0 1.5px var(--o); }
@@ -432,10 +440,24 @@ button.osq.auc { animation: aucblink 0.7s steps(2) infinite; background: #ffcf4a
   #hud .right { overflow-y: auto; }
   .actions button, .offer button, .votecard button, .as-controls button { min-height: 34px; } /* (for thumbs) */
   .actions button.tool { min-width: 34px; height: 34px; }
-  .topbar { gap: 4px; padding: 6px; }
+  .topbar { gap: 4px; padding: max(6px, env(safe-area-inset-top)) 6px 6px; }
   .topbar .lbl, .topbar .brand { display: none; }
   .topbar .chipbtn { padding: 4px 6px; flex: none; white-space: nowrap; font-size: 13px; }
   .topbar .chipbtn.rm { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   .topbar > button:last-child { padding: 5px 8px; }
   .paused { top: 150px; white-space: normal; width: calc(100% - 24px); }
+}
+
+/* as an app */
+html, body { overscroll-behavior: none; }
+.installcard { display: flex; gap: 10px; align-items: center; justify-content: space-between; margin-top: 12px; padding: 8px 12px; border-radius: 9px; background: rgba(240, 179, 60, 0.12); font-size: 13px; }
+.steps { padding-left: 20px; }
+.steps li { margin: 6px 0; }
+/* a phone held sideways */
+@media (max-height: 460px) and (min-width: 721px) {
+  #hud .left, #hud .right { gap: 3px; }
+  .pcard { height: 22px; }
+  .auction-stage { top: 38px; bottom: auto; width: min(400px, calc(100% - 24px)); min-width: 0; padding: 4px 8px; }
+  .auction-stage .deed.big .deed-rents { font-size: 10px; margin-bottom: 2px; }
+  .as-head { display: none; }
 }
