@@ -63,8 +63,17 @@ h4 { font-size: 13px; color: var(--muted); margin-top: 10px; }
 .screen.lobby { justify-content: flex-start; }
 .screen.lobby { padding-top: 46px; }
 .screen.lobby .card { max-width: 388px; padding: 12px 14px; border-radius: 13px; font-size: 13px; margin: 0 0 auto 0; }
-.screen.lobby .btnrow.end { margin-top: 10px; flex-wrap: nowrap; gap: 4px; }
-.screen.lobby .btnrow.end button.primary { padding: 6px 12px; white-space: nowrap; }
+.screen.lobby .btnrow.end { margin-top: 8px; flex-wrap: nowrap; gap: 8px; }
+.screen.lobby .btnrow.end button.small { flex: none; }
+.screen.lobby .btnrow.end .go { flex: 1; min-width: 0; padding: 8px 12px; white-space: normal; line-height: 1.15; }
+.screen.lobby .btnrow.end .go:disabled { opacity: 1; background: #4a4536; color: #d8cfb8; }
+.screen.lobby .btnrow.end .go.isready { background: #1f9d55; color: #fff; }
+.screen.lobby .lchat { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.rdyline { display: flex; flex-direction: column; gap: 2px; margin-top: 8px; font-size: 12px; overflow-wrap: anywhere; }
+.member .rdy { flex: none; width: 16px; height: 16px; border-radius: 50%; background: #4a4f57; color: #d5dbe0; font-size: 11px; font-weight: 900; line-height: 16px; text-align: center; }
+.member .rdy.on { background: #1f9d55; color: #fff; }
+.lobby .changed { color: #ffd65a; }
+.lobby .maps.changed, .lobby .rules label.changed select, .lobby .rules label.changed b { box-shadow: 0 0 0 2px rgba(255, 214, 90, 0.7); border-radius: 8px; }
 .logo { font-size: 46px; font-weight: 900; letter-spacing: 0.16em; color: var(--accent); margin: 0; }
 .tag { margin: 4px 0 18px; color: #cbd5db; }
 .field { display: block; font-size: 13px; color: var(--muted); }
