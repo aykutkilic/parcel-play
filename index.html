@@ -13,9 +13,56 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="PARCEL">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="stylesheet" href="parcel-9d7024a-11240624.css">
+  <style>
+    /* the loading screen: here, so that it is on the page before anything else
+       has arrived (only transforms and opacity move: those go on while the
+       board is being built) */
+    body { margin: 0; background: #14202b; }
+    #boot { position: fixed; inset: 0; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; background: radial-gradient(circle at 50% 38%, #24384a, #14202b 62%); color: #f3ecdc; font: 600 15px/1.35 'Avenir Next', 'Segoe UI', system-ui, sans-serif; transition: opacity 0.45s; }
+    #boot.gone { opacity: 0; pointer-events: none; }
+    #boot.over { background: rgba(12, 20, 28, 0.82); }
+    #boot b { font-size: 34px; letter-spacing: 0.14em; font-weight: 900; color: #ffc145; margin-right: -0.14em; }
+    #boot .glass { position: relative; width: 132px; height: 132px; }
+    #boot .glass svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    #boot .in { position: absolute; inset: 0; clip-path: path('M39.200 14.400 C40.400 33 52.600 41.200 52.600 56.700 C52.600 69 41.300 77.300 41.300 90.700 C41.300 100 46.400 104.700 52.600 105.200 L79.400 105.200 C85.600 104.700 90.700 100 90.700 90.700 C90.700 77.300 79.400 69 79.400 56.700 C79.400 41.200 91.600 33 92.800 14.400 Z'); }
+    #boot .tea { position: absolute; left: 0; right: 0; top: 26px; height: 82px; transform: translateY(88px); transition: transform 9s cubic-bezier(0.1, 0.6, 0.3, 1); will-change: transform; background: linear-gradient(#c9421a, #8f1d08 30%, #a82a0c 65%, #e8641e); }
+    #boot .tea::before { content: ''; position: absolute; left: -132px; top: -5px; width: 396px; height: 10px; background: radial-gradient(ellipse 33px 5px at 33px 5px, #d95a26 98%, transparent) 0 0 / 66px 10px; animation: bootwave 1.5s linear infinite; will-change: transform; }
+    #boot[data-at="load"] .tea { transform: translateY(40px); }
+    #boot[data-at="build"] .tea { transform: translateY(16px); transition-duration: 1.4s; }
+    #boot[data-at="done"] .tea { transform: none; transition-duration: 0.3s; }
+    #boot i.steam { position: absolute; left: 58px; top: -8px; width: 5px; height: 24px; border-radius: 4px; background: #fff; opacity: 0; filter: blur(2.5px); animation: bootsteam 2.4s ease-out infinite; }
+    #boot i.steam + i.steam { left: 69px; animation-delay: 1.1s; }
+    #boot p { margin: 0; min-height: 1.4em; text-align: center; padding: 0 20px; opacity: 0.92; }
+    #boot p small { display: block; font-weight: 500; opacity: 0.75; font-size: 13px; margin-top: 4px; }
+    #boot button { font: inherit; padding: 9px 20px; border: 0; border-radius: 9px; background: #ffc145; color: #22160a; cursor: pointer; }
+    #boot.failed .tea::before, #boot.failed i.steam { animation: none; }
+    @keyframes bootwave { to { transform: translateX(66px); } }
+    @keyframes bootsteam { 0% { opacity: 0; transform: translateY(10px) scaleY(0.6); } 35% { opacity: 0.5; } 100% { opacity: 0; transform: translateY(-16px) scaleY(1.5); } }
+    @media (prefers-reduced-motion: reduce) { #boot .tea::before, #boot i.steam { animation: none; } }
+  </style>
 </head>
 <body>
+  <div id="boot" role="status" aria-live="polite">
+    <b>PARCEL</b>
+    <div class="glass"><svg viewBox="0 0 64 64"><ellipse cx="32" cy="54.500" rx="29.500" ry="7.200" fill="#e6ebee"/><ellipse cx="32" cy="54" rx="25.500" ry="5.500" fill="none" stroke="#c9302c" stroke-width="1.700" stroke-dasharray="4 1.800"/></svg><div class="in"><div class="tea"></div></div><svg viewBox="0 0 64 64"><path d="M17.500 6 C18 15.500 24 19.500 24 27.500 C24 33 18.500 36.500 18.500 44 C18.500 49.500 21.500 53 25 53.500 L39 53.500 C42.500 53 45.500 49.500 45.500 44 C45.500 36.500 40 33 40 27.500 C40 19.500 46 15.500 46.500 6 Z" fill="#fff" fill-opacity=".1" stroke="#fff" stroke-opacity=".85" stroke-width="1.500"/><path d="M21.800 9.500 C22.500 16 27 19.500 27.300 26 M23 38.500 C21.500 41 21.500 45.500 23 48" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" opacity=".8"/><ellipse cx="32" cy="6" rx="14.500" ry="2.500" fill="none" stroke="#fff" stroke-width="1.500"/></svg><i class="steam"></i><i class="steam"></i></div>
+    <p></p>
+  </div>
+  <script>
+    (function () {
+      var el = document.getElementById('boot'), p = el.querySelector('p'), tr = /^tr/i.test(navigator.language || ''), slow;
+      try { var l = localStorage.getItem('parcel.lang'); if (l) tr = l === 'tr'; else if (!tr) tr = /Istanbul|^Turkey$/.test(Intl.DateTimeFormat().resolvedOptions().timeZone || ''); } catch (e) { /* */ }
+      p.textContent = tr ? 'Oyun yükleniyor…' : 'Loading the game…';
+      setTimeout(function () { if (!el.dataset.at) el.dataset.at = 'load'; }, 30);
+      slow = setTimeout(function () { var s = document.createElement('small'); s.textContent = tr ? 'Bağlantı yavaş görünüyor, biraz daha…' : 'The connection seems slow, a little longer…'; p.appendChild(s); }, 12000);
+      window.bootOver = function () { clearTimeout(slow); window.bootFailed = function () {}; };
+      window.bootFailed = function () {
+        clearTimeout(slow); el.className = 'failed'; p.textContent = tr ? 'Oyun yüklenemedi.' : 'The game could not be loaded.';
+        var b = document.createElement('button'); b.textContent = tr ? 'Yeniden dene' : 'Try again'; b.onclick = function () { location.reload(); }; el.appendChild(b); window.bootFailed = function () {};
+      };
+      addEventListener('error', function (e) { if (e.error) window.bootFailed(); });
+    })();
+  </script>
+  <link rel="stylesheet" href="parcel-3d0cdc8-11240649.css">
   <div id="stage"></div>
   <div id="top"></div>
   <div id="hud"></div>
@@ -26,6 +73,6 @@
   <div id="cardpop"></div>
   <div id="modal"></div>
   <div id="toasts"></div>
-  <script type="module" src="parcel-9d7024a-11240624.js"></script>
+  <script type="module" src="parcel-3d0cdc8-11240649.js" onerror="bootFailed()"></script>
 </body>
 </html>
