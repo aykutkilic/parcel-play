@@ -127,10 +127,10 @@ button.room .rc { margin-left: auto; font-weight: 800; letter-spacing: 0.15em; c
 .member .mx button { padding: 2px 5px; font-size: 11px; opacity: 0.75; }
 .member .botbadge { font-size: 8px; padding: 0 3px; }
 .seat { margin-top: 7px; display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; }
-.pick { display: flex; gap: 4px; }
+.pick { display: flex; flex-wrap: wrap; gap: 4px; }
 button.tok { font-size: 16px; line-height: 1; padding: 4px 5px; background: rgba(255, 255, 255, 0.06); }
 button.tok.on, button.sw.on { outline: 2px solid var(--accent); outline-offset: 1px; }
-button.sw { width: 21px; height: 21px; border-radius: 50%; padding: 0; border: 2px solid rgba(255, 255, 255, 0.3); }
+button.sw { width: 21px; height: 21px; border-radius: 50%; padding: 0; background: var(--c); border: 2px solid rgba(255, 255, 255, 0.3); }
 .rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 9px; }
 .rules label { font-size: 11px; color: var(--muted); }
 .rules select, .rules b { display: block; width: 100%; margin-top: 2px; padding: 3px 5px; font-size: 12px; color: var(--text); }
@@ -690,3 +690,20 @@ html, body { overscroll-behavior: none; }
 .le-row textarea.bad { border-color: var(--bad); }
 .le-note { color: var(--bad); font-size: 11px; }
 .le-row .btnrow { margin: 4px 0; }
+
+/* the drawn tokens (token-icons.js), as big as the emoji beside them */
+img.tkf { width: 1.24em; height: 1.24em; vertical-align: -0.26em; object-fit: contain; pointer-events: none; -webkit-user-drag: none; }
+.pin img.tkf { width: 11px; height: 11px; vertical-align: -1.5px; }
+
+/* gold and silver players shine: a gleam goes over the metal, specks glitter */
+[style*="--c: #b98a2c"], [style*="--o: #b98a2c"] { --metal: linear-gradient(115deg, #8a5f12 0%, #d9a93c 18%, #fff4bd 30%, #c8912a 44%, #8f6416 58%, #f6d983 72%, #b98a2c 86%, #8a5f12 100%); --ink: #8a5f12; --fleck: #fffbe0; }
+[style*="--c: #a9b2bd"], [style*="--o: #a9b2bd"] { --metal: linear-gradient(115deg, #77818c 0%, #c3cbd3 18%, #ffffff 30%, #a0abb6 44%, #78828d 58%, #f2f5f7 72%, #a9b2bd 86%, #77818c 100%); --ink: #626c77; --fleck: #ffffff; }
+:is(.sw, .pin, .aface, .dwho, .as-bidder, .as-pl.lead, .nwho, .cface):is([style*="--c: #b98a2c"], [style*="--c: #a9b2bd"]), :is(.deed-owner, button.osq.own, button.osq.own:hover:not(:disabled)):is([style*="--o: #b98a2c"], [style*="--o: #a9b2bd"]) {
+  background: radial-gradient(circle at 22% 30%, var(--fleck) 0 0.6px, transparent 1.4px) 0 0 / 11px 9px, radial-gradient(circle at 70% 64%, var(--fleck) 0 0.5px, transparent 1.2px) 0 0 / 7px 13px, var(--metal) 0 0 / 260% 100%;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.75), 0 1px 2px rgba(0, 0, 0, 0.85);
+}
+:is(.sw, .pin, .aface, .dwho, .as-bidder, .as-pl.lead, .nwho, .cface):is([style*="--c: #b98a2c"], [style*="--c: #a9b2bd"]) { animation: gleam 4.2s linear infinite; }
+button.sw:is([style*="--c: #b98a2c"], [style*="--c: #a9b2bd"]) { border-color: var(--fleck); box-shadow: 0 0 7px -1px var(--fleck); }
+:is(.pcard:not(.turn), .member):is([style*="--c: #b98a2c"], [style*="--c: #a9b2bd"]) { box-shadow: inset 5px 0 7px -4px var(--fleck); }
+@keyframes gleam { from { background-position: 0 0, 0 0, 130% 0; } to { background-position: 11px 9px, -7px 13px, -130% 0; } }
+@media (prefers-reduced-motion: reduce) { :is(.sw, .pin, .aface, .dwho, .as-bidder, .as-pl.lead, .nwho, .cface) { animation: none !important; } }
