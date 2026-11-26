@@ -1,31 +1,55 @@
-// Makes the game an app: it opens without a connection (playing with others
-// still needs one). The newest version always wins when there is a network;
-// files named after a release, sounds and icons come from the cache.
-const VERSION = 'c01a32c-11241020';
-const CACHE = `parcel-${VERSION}`;
-const SHELL = ['./', 'manifest.webmanifest', 'icons/icon-192.png'];
+// A worker serves the HTML and modules installed together for its release.
+// Failed or incomplete installations leave the previous worker in control.
+const VERSION = "c0bdaf6-20261126172355551";
+const SHELL = ["shell-c0bdaf6-20261126172355551.html","parcel-c0bdaf6-20261126172355551.css","lobby-preview.webp","manifest.webmanifest","icons/icon-192.png","parcel-c0bdaf6-20261126172355551.js","chunk-chunk-CKGS5IGY.js","chunk-chunk-JH7QWC3D.js","chunk-chunk-7FBZCKBM.js","chunk-chunk-HXVKYEOY.js","chunk-chunk-YNEPLUHX.js","chunk-chunk-NOJJRAPG.js"];
+const PAGE = "shell-c0bdaf6-20261126172355551.html";
+const prefix = 'parcel:' + self.registration.scope + ':';
+const cacheName = prefix + VERSION;
+const absolute = path => new URL(path, self.registration.scope).href;
+const required = new Set(SHELL.map(absolute));
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => Promise.allSettled(SHELL.map((u) => c.add(new Request(u, { cache: 'reload' }))))).then(() => self.skipWaiting()));
+self.addEventListener('install', event => {
+  event.waitUntil((async () => {
+    const cache = await caches.open(cacheName);
+    await cache.addAll(SHELL.map(path => new Request(absolute(path), { cache: 'reload' })));
+  })());
 });
-self.addEventListener('activate', (e) => {
-  // (only this game's caches: other sites may share the origin)
-  e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => /^parcel-/.test(k) && k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim()));
+self.addEventListener('activate', event => {
+  event.waitUntil((async () => {
+    for (const name of await caches.keys()) {
+      if (name.startsWith(prefix) && name !== cacheName) await caches.delete(name);
+      else if (name.startsWith('parcel-')) {
+        const legacy = await caches.open(name);
+        if (await legacy.match(absolute('./'))) await caches.delete(name);
+      }
+    }
+    await self.clients.claim();
+  })());
 });
 
-const keep = (req, res) => { if (res.ok && res.type === 'basic' && res.status === 200) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)).catch(() => {}); } return res; };
-self.addEventListener('fetch', (e) => {
-  const req = e.request, url = new URL(req.url), scope = new URL(self.registration.scope);
-  if (req.method !== 'GET' || url.origin !== scope.origin || !url.pathname.startsWith(scope.pathname) || req.headers.has('range')) return;
+self.addEventListener('fetch', event => {
+  const req = event.request;
+  if (req.method !== 'GET' || !req.url.startsWith(self.registration.scope) || req.headers.has('range')) return;
+  const url = new URL(req.url);
   if (/\/(ws|version\.json)$/.test(url.pathname)) return;
-  if (req.mode === 'navigate') {
-    // (an invite link, ?room=…, is the same page)
-    e.respondWith(fetch(req).then((res) => { if (res.ok) keep(new Request('./'), res); return res; }).catch(() => caches.match('./', { cacheName: CACHE }).then((r) => r || Response.error())));
-    return;
-  }
-  if (/\/parcel-[^/]+\.(js|css)$|\/sfx\/|\/icons\//.test(url.pathname)) {
-    e.respondWith(caches.match(req, { cacheName: CACHE }).then((hit) => hit || fetch(req).then((res) => keep(req, res))));
-    return;
-  }
-  e.respondWith(fetch(req).then((res) => keep(req, res)).catch(() => caches.match(req, { cacheName: CACHE }).then((r) => r || Response.error())));
+  const page = req.mode === 'navigate';
+  const key = page ? absolute(PAGE) : req.url;
+  event.respondWith((async () => {
+    const cache = await caches.open(cacheName);
+    if (page || required.has(key) || /\/chunk-[\w-]+\.js$/.test(url.pathname)) {
+      const hit = await cache.match(key);
+      if (hit) return hit;
+    }
+    try {
+      const response = await fetch(req);
+      if (!page && response.ok && response.type === 'basic') {
+        try { await cache.put(req, response.clone()); } catch { /* storage may be full */ }
+      }
+      return response;
+    } catch (error) {
+      const hit = await cache.match(key);
+      if (hit) return hit;
+      throw error;
+    }
+  })());
 });
