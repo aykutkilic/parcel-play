@@ -35,6 +35,7 @@ button.icon { background: transparent; border: none; padding: 6px 8px; font-size
 input, select { font: inherit; color: var(--text); background: #0f1922; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
 input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--accent); vertical-align: -2px; }
 input:focus, select:focus { outline: 2px solid rgba(240, 179, 60, 0.5); outline-offset: 0; }
+button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 h1, h2, h3, h4 { margin: 0 0 8px; line-height: 1.2; }
 h3 { font-size: 15px; margin-top: 14px; color: #cfd9df; }
 h4 { font-size: 13px; color: var(--muted); margin-top: 10px; }
@@ -49,11 +50,12 @@ h4 { font-size: 13px; color: var(--muted); margin-top: 10px; }
 
 /* ---------------------------------------------------------------- top bar */
 #top { position: fixed; top: 0; left: 0; right: 0; z-index: 5; pointer-events: none; }
-.topbar { display: flex; align-items: center; gap: 5px; padding: 6px max(8px, env(safe-area-inset-right)) 6px max(8px, env(safe-area-inset-left)); padding-top: max(6px, env(safe-area-inset-top)); pointer-events: auto; background: linear-gradient(to bottom, rgba(20, 32, 43, 0.9), rgba(20, 32, 43, 0)); }
+.topbar { display: flex; align-items: center; gap: 5px; padding: 6px max(8px, env(safe-area-inset-right)) 6px max(8px, env(safe-area-inset-left)); padding-top: max(6px, env(safe-area-inset-top)); pointer-events: auto; background: linear-gradient(to bottom, rgba(20, 32, 43, 0.9), rgba(20, 32, 43, 0)); overflow-x: auto; scrollbar-width: none; }
+.topbar::-webkit-scrollbar { display: none; }
 .brand { font-weight: 900; letter-spacing: 0.12em; font-size: 15px; color: var(--accent); margin-right: 4px; }
 .chipbtn { background: rgba(20, 32, 43, 0.6); border-radius: 999px; padding: 2px 9px; font-size: 12px; }
 .topbar > button { padding: 2px 9px; font-size: 12px; }
-.netstatus { background: #6b4a1f; color: #ffe2a8; padding: 3px 10px; border-radius: 999px; font-size: 13px; }
+.netstatus { background: #6b4a1f; color: #ffe2a8; padding: 3px 10px; border-radius: 999px; font-size: 13px; min-width: 0; max-width: 38vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .grow { flex: 1; }
 
 /* ---------------------------------------------------------------- screens */
@@ -198,7 +200,7 @@ input.bid { width: 90px; padding: 5px 8px; }
 .offer .btnrow { justify-content: flex-end; }
 
 .logbox { flex: 0 0 auto; padding: 4px 9px; }
-.logbox[open] { flex: 0 1 auto; max-height: 45%; overflow-y: auto; } /* (a details' content does not shrink as a flex child) */
+.logbox[open] { flex: 0 1 auto; max-height: 45%; display: flex; flex-direction: column; overflow: hidden; } /* (single scroll container: .log) */
 .logbox summary { cursor: pointer; color: #c5d0d6; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .logbox[open] summary { color: var(--muted); }
 .log { overflow-y: auto; font-size: 11px; color: #c5d0d6; margin-top: 3px; flex: 1; min-height: 60px; }
@@ -462,7 +464,7 @@ button.osq.pick { outline: 2px solid #35d07f; z-index: 2; }
 .cd { font-variant-numeric: tabular-nums; opacity: 0.75; font-weight: 800; margin-left: 4px; }
 .cd::after { content: 's'; }
 .timerbar { height: 3px; border-radius: 2px; background: rgba(255, 255, 255, 0.08); margin-top: 6px; overflow: hidden; }
-.timerbar i { display: block; height: 100%; width: 100%; background: var(--accent); border-radius: 3px; transition: width 0.1s linear; }
+.timerbar i { display: block; height: 100%; width: 100%; background: var(--accent); border-radius: 3px; transform-origin: left center; transform: scaleX(1); transition: transform 0.1s linear; will-change: transform; }
 .timerbar.low i { background: var(--bad); }
 .hint { font-size: 12px; margin: 2px 0 6px; }
 .settings label { display: block; }
@@ -540,14 +542,14 @@ button.osq.pick { outline: 2px solid #35d07f; z-index: 2; }
 .as-cash { width: 100%; text-align: center; font-size: 10px; color: var(--muted); }
 
 @media (max-width: 920px) {
-  .auction-stage { width: calc(100% - 24px); min-width: 0; top: auto; bottom: 12px; }
+  .auction-stage { width: calc(100% - 24px); min-width: 0; top: calc(44px + env(safe-area-inset-top)); bottom: auto; max-height: calc(100vh - 60px); overflow-y: auto; }
   .as-body { grid-template-columns: 130px 1fr; }
   .as-history { display: none; }
 }
 @media (max-width: 720px) {
-  .auction-stage { bottom: 8px; padding: 10px; }
-  .as-body { grid-template-columns: 1fr; }
-  .deed.big .deed-rents { display: none; }
+  .auction-stage { top: calc(42px + env(safe-area-inset-top)); bottom: auto; padding: 8px 10px; }
+  .as-body { grid-template-columns: 120px 1fr; gap: 7px; }
+  .deed.big .deed-rents { font-size: 10px; margin: 0 6px 4px; width: calc(100% - 12px); }
 }
 
 /* ---------------------------------------------------------------- İstanbul: simit, maps, Enflasyon, narrator */
@@ -671,7 +673,7 @@ html, body { overscroll-behavior: none; }
   .oset.rest:not(:has(.here)) { display: none; }
   .owners { gap: 11px 6px; }
   .oset { gap: 1px; }
-  button.osq { width: 14px; }
+  button.osq { width: 16px; height: 24px; }
   .screen.lobby .card { max-width: none; }
 }
 
