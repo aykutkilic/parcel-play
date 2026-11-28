@@ -1,8 +1,8 @@
 // A worker serves the HTML and modules installed together for its release.
 // Failed or incomplete installations leave the previous worker in control.
-const VERSION = "c0bdaf6-20261126172355551";
-const SHELL = ["shell-c0bdaf6-20261126172355551.html","parcel-c0bdaf6-20261126172355551.css","lobby-preview.webp","manifest.webmanifest","icons/icon-192.png","parcel-c0bdaf6-20261126172355551.js","chunk-chunk-CKGS5IGY.js","chunk-chunk-JH7QWC3D.js","chunk-chunk-7FBZCKBM.js","chunk-chunk-HXVKYEOY.js","chunk-chunk-YNEPLUHX.js","chunk-chunk-NOJJRAPG.js"];
-const PAGE = "shell-c0bdaf6-20261126172355551.html";
+const VERSION = "d3994ff-20261128072726197";
+const SHELL = ["shell-d3994ff-20261128072726197.html","parcel-d3994ff-20261128072726197.css","lobby-preview.webp","manifest.webmanifest","icons/icon-192.png","parcel-d3994ff-20261128072726197.js","chunk-chunk-7J6XLPGA.js","chunk-chunk-QIIELIOR.js","chunk-chunk-QNKBZBNZ.js","chunk-chunk-HXVKYEOY.js","chunk-chunk-YNEPLUHX.js","chunk-chunk-BIKQNJ4A.js"];
+const PAGE = "shell-d3994ff-20261128072726197.html";
 const prefix = 'parcel:' + self.registration.scope + ':';
 const cacheName = prefix + VERSION;
 const absolute = path => new URL(path, self.registration.scope).href;
